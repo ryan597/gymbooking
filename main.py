@@ -9,7 +9,7 @@ and time_slot fields with your prefered values.
 {
     "url" : "https://hub.ucd.ie/usis/W_HU_MENU.P_PUBLISH?p_tag=GYMBOOK",
     "student_number" : "STUDENT_NUMBER",
-    "time_slot" : "9:30"
+    "time_slot" : "09:30"
 }
 """
 import json
@@ -58,6 +58,8 @@ def book_gym(user, driver):
 
 
 if __name__ == "__main__":
+    now = datetime.now()
+    print(f"Entering Python script at {now}\n")
 
     with open("config.json", 'r') as file:
         config = json.load(file)
@@ -65,6 +67,9 @@ if __name__ == "__main__":
     url = config['url']
     user = config['student_number']
     time_slot = config['time_slot']
+    print("Configuration loaded\n" +
+          f"\tuser:\t{user}\n" +
+          f"\tslot:\t{time_slot}")
 
     # No display
     firefox_options = webdriver.firefox.webdriver.Options()
@@ -77,13 +82,18 @@ if __name__ == "__main__":
 
     sleep_time = (sleep_until - datetime.datetime.today()).seconds
     driver = webdriver.Firefox(options=firefox_options)
-
+    now = datetime.now()
+    print(f"Entering sleep at {now}")
     time.sleep(sleep_time)
     driver.get(url)
 
+    print("Awake \nURL recieved\nChecking times...\n")
     # Check for prefered time at Poolside gym
     if check_gym_times(time_slot, driver):
         book_gym(user)
     # Check for prefered time at Performance gym
     elif check_gym_times(time_slot, driver, override=True):
         book_gym(user)
+
+    now = datetime.now()
+    print(f"Exiting Python script at {now}\n")
