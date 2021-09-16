@@ -12,6 +12,7 @@ and time_slot fields with your prefered values.
 """
 import json
 import time
+import datetime
 from selenium import webdriver
 
 
@@ -36,13 +37,14 @@ def check_gym(i, driver):
 
 def check_available(i, driver):
     avail = driver.find_element_by_xpath(f"//table/tbody/tr[{i}]/td[6]")
-    if avail == 'Book':
+    if avail.text == 'Book':
         avail.click()
         print("Timeslot is available.\n")
 
 
 def book_gym(user, driver):
-    student_number_box = driver.find_element_by_xpath("")
+    student_number_box = driver.find_element_by_xpath(
+        "")
     student_number_box.send_keys(user)
     student_number_box.submit()
 
@@ -60,8 +62,15 @@ if __name__ == "__main__":
     firefox_options = webdriver.firefox.webdriver.Options()
     firefox_options.set_headless()
 
+    sleep_until = datetime.datetime.today().replace(hour=6,
+                                                    minute=30,
+                                                    second=0,
+                                                    microsecond=0)
+
+    sleep_time = (sleep_until - datetime.datetime.today()).seconds
     driver = webdriver.Firefox(options=firefox_options)
-    time.sleep(5)
+
+    time.sleep(sleep_time)
     driver.get(url)
 
     # Check for prefered time and gym
