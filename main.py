@@ -1,4 +1,3 @@
-
 """
 In the parent directory you should have a file `config.json` which is
 structured as follows. Please fill in the student_number

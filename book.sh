@@ -5,3 +5,5 @@ cat secrets/password.txt | sudo --stdin rtcwake -m disk -l -t $(date +%s -d `tom
 
 conda activate gymbooking
 python main.py
+
+sudo rtcwake -m disk -t 30
