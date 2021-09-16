@@ -9,7 +9,18 @@
     "time_slot" : "9:30"
 }
 """
+import json
+import selenium as sel
+from selenium import webdriver as web
 
 if __name__ == "__main__":
-    pass
 
+    with open("secrets/config.json", 'r') as file:
+        config = json.load(file)
+
+    url = config['url']
+    user = config['student_number']
+    time = config['time_slot']
+
+    driver = web.Firefox()
+    driver.get(url)
