@@ -40,14 +40,8 @@ conda env export > environment.yml
 
 ## 2. Booking
 
-To run the script after downloading the repo from github you simply configure the [`config.json`](config.json) file with your own student number and preferred time slot. Then in the terminal before you want to shutdown your computer you run the script with.  You should also create a `password.txt` file containing your root password or run the script as sudo.
+To run the script after downloading the repo from github you simply configure the [`config.json`](config.json) file with your own student number and preferred time slot. Then in the terminal before you want to shutdown your computer you run the script with.
 
 ```bash
-# with passwords.txt
 ./book.sh
-```
-
-```bash
-# without passwords.txt
-sudo ./book.sh
 ```
