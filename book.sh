@@ -6,4 +6,5 @@ cat secrets/password.txt | sudo --stdin rtcwake -m disk -l -t $(date +%s --date 
 conda activate gymbooking
 python main.py > errorlog.txt 2>&1 # log any errors for debugging
 
+cat errorlog.txt
 #shutdown

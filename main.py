@@ -16,6 +16,7 @@ import json
 import time
 import datetime
 from selenium import webdriver
+from selenium.webdriver.firefox.options import Options
 
 
 def check_gym_times(time_slot, driver, override=False):
@@ -58,7 +59,7 @@ def book_gym(user, driver):
 
 
 if __name__ == "__main__":
-    now = datetime.now()
+    now = datetime.datetime.now().replace(microsecond=0)
     print(f"Entering Python script at {now}\n")
 
     with open("config.json", 'r') as file:
@@ -72,8 +73,9 @@ if __name__ == "__main__":
           f"\tslot:\t{time_slot}")
 
     # No display
-    firefox_options = webdriver.firefox.webdriver.Options()
+    firefox_options = Options()
     firefox_options.set_headless()
+    firefox_options.binary_location = '/usr/lib/firefox/firefox'
 
     sleep_until = datetime.datetime.today().replace(hour=6,
                                                     minute=30,
@@ -81,8 +83,11 @@ if __name__ == "__main__":
                                                     microsecond=0)
 
     sleep_time = (sleep_until - datetime.datetime.today()).seconds
-    driver = webdriver.Firefox(options=firefox_options)
-    now = datetime.now()
+
+    driver = webdriver.Firefox(executable_path='/usr/local/bin/geckodriver',
+                               options=firefox_options)
+    now = datetime.datetime.now().replace(microsecond=0)
+
     print(f"Entering sleep at {now}")
     time.sleep(sleep_time)
     driver.get(url)
@@ -95,5 +100,5 @@ if __name__ == "__main__":
     elif check_gym_times(time_slot, driver, override=True):
         book_gym(user)
 
-    now = datetime.now()
+    now = datetime.datetime.now().replace(microsecond=0)
     print(f"Exiting Python script at {now}\n")
