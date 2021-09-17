@@ -43,5 +43,5 @@ conda env export > environment.yml
 To run the script after downloading the repo from github you simply configure the [`config.json`](config.json) file with your own student number and preferred time slot. Then in the terminal before you want to shutdown your computer you run the script with.
 
 ```bash
-./book.sh
+source ./book.sh
 ```
