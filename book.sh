@@ -4,7 +4,7 @@
 cat secrets/password.txt | sudo --stdin rtcwake -m mem -l -t $(date +%s --date 'tomorrow 06:15')
 
 conda activate gymbooking
-python main.py > errorlog.txt 2>&1 # log any errors for debugging
+python main.py > logging.txt 2>&1 # log any errors for debugging
 
-cat errorlog.txt
+cat logging.txt
 shutdown
