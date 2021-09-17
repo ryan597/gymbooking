@@ -2,6 +2,20 @@
 
 Automated booking for UCD gym so you don't miss out on the time slot you want.
 
+Since reopening of gyms in Ireland (after closure for the Covid19 pandemic) my university gym requires booking the gym.  
+Booking for each timeslot opens 3 hours before the respective timeslot.
+This became a problem for me when undergraduates returned and the slots booked out almost instantly (even at 6 in the morning).
+This program is written to prevent me having to get up at 6am and refreshing my browser just to get a gym slot 3 hours later.
+
+---
+
+## To Do
+
+- convert to c++ program
+- speed up python implementation
+- more options for timeslots
+- GUI
+
 ---
 
 ## Contents
