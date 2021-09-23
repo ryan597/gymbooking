@@ -47,13 +47,16 @@ def check_gym(i, driver, override):
 
 
 def check_available(i, driver):
-    avail = driver.find_element_by_xpath(
-        f"//table/tbody/tr/td/table/tbody/tr[{i}]/td[6]")
-    if avail.text == 'Book':
-        avail.click()
-        return True
-    else:  # DEBUG LINE
-        print("Fully booked", flush=True)
+    not_booked = True
+    while not_booked:  # continually check if able to book
+        avail = driver.find_element_by_xpath(
+            f"//table/tbody/tr/td/table/tbody/tr[{i}]/td[6]")
+        if avail.text == 'Book':
+            avail.click()
+            return True
+        elif avail.text == 'Full':
+            print("Fully booked", flush=True)
+            not_booked = False
 
 
 def book_gym(user, driver):
@@ -66,9 +69,13 @@ def book_gym(user, driver):
     # click confirm
     confirm = WebDriverWait(driver, 10).until(
         EC.element_to_be_clickable((By.LINK_TEXT, 'Confirm Booking')))
-
-    confirm.click()
-    print("Success, timeslot is booked\n", flush=True)
+    try:
+        confirm.click()
+        print("Success, timeslot is booked\n", flush=True)
+    except Exception:
+        confirm = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.XPATH, '')))
+        print("Success, timeslot is booked\n", flush=True)
 
 
 if __name__ == "__main__":
