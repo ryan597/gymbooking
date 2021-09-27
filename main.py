@@ -66,17 +66,20 @@ def book_gym(user, driver):
     # send student number and submit
     student_number_box.send_keys(user)
     student_number_box.submit()
-    # click confirm
-    confirm = WebDriverWait(driver, 10).until(
-        EC.element_to_be_clickable((By.LINK_TEXT, 'Confirm Booking')))
-    try:
-        confirm.click()
-        print("Success, timeslot is booked\n", flush=True)
-    except Exception:
+    for i in range(10):
         confirm = WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.XPATH, '')))
-        print("Success, timeslot is booked\n", flush=True)
-
+            EC.element_to_be_clickable((By.LINK_TEXT, 'Confirm Booking')))
+        try:
+            confirm.click()
+            print("Success, timeslot is booked\n", flush=True)
+        except Exception as e:
+            #try:
+            #    confirm = WebDriverWait(driver, 10).until(
+            #        EC.element_to_be_clickable((By.XPATH, '')))
+            #    print("Success, timeslot is booked\n", flush=True)
+            #except Exception as e:
+            #    print("Unable to book now", e)
+            print("Unable to book\n", e, flush=True)
 
 if __name__ == "__main__":
     now = datetime.datetime.now().replace(microsecond=0)
