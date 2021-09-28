@@ -19,6 +19,7 @@ from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 
 
@@ -66,20 +67,28 @@ def book_gym(user, driver):
     # send student number and submit
     student_number_box.send_keys(user)
     student_number_box.submit()
-    for i in range(10):
+    # One of these has to fucking work, so lets test them all tonight
+    try:
         confirm = WebDriverWait(driver, 10).until(
             EC.element_to_be_clickable((By.LINK_TEXT, 'Confirm Booking')))
+        confirm.click()
+        print("Success, timeslot is booked\n", flush=True)
+    except Exception as e:
+        print("Unable to book\n", e, flush=True)
         try:
-            confirm.click()
-            print("Success, timeslot is booked\n", flush=True)
+            confirm = driver.find_element_by_link_text('Confirm Booking')
+            ActionChains(driver).move_to_element(confirm).click().perform()
         except Exception as e:
-            #try:
-            #    confirm = WebDriverWait(driver, 10).until(
-            #        EC.element_to_be_clickable((By.XPATH, '')))
-            #    print("Success, timeslot is booked\n", flush=True)
-            #except Exception as e:
-            #    print("Unable to book now", e)
             print("Unable to book\n", e, flush=True)
+            try:
+                confirm = driver.find_element_by_link_text('Confirm Booking')
+                driver.execute_script("arguments[0].click();", confirm)
+            except Exception as e:
+                print("FUCKING FUCK for fuck sake\n", e, flush=True)
+                time.sleep(5)
+                confirm = driver.find_element_by_link_text('Confirm Booking')
+                confirm.click()
+
 
 if __name__ == "__main__":
     now = datetime.datetime.now().replace(microsecond=0)
