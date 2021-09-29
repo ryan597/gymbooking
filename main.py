@@ -12,6 +12,14 @@ and time_slot fields with your prefered values.
     "time_slot" : "09:30"
 }
 """
+
+# TODO: Clean up main script to functions
+#       Write general sleep_time function
+#       Main function
+#       Test runtime and speedup
+
+
+import os
 import json
 import time
 import datetime
@@ -67,15 +75,23 @@ def book_gym(user, driver):
     student_number_box.send_keys(user)
     student_number_box.submit()
     # click confirm
-    confirm = WebDriverWait(driver, 10).until(
+    confirm_button = WebDriverWait(driver, 10).until(
         EC.element_to_be_clickable((By.LINK_TEXT, 'Confirm Booking')))
     try:
-        confirm.click()
+        confirm_button.click()
         print("Success, timeslot is booked\n", flush=True)
     except Exception:
-        confirm = WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.XPATH, '')))
-        print("Success, timeslot is booked\n", flush=True)
+        cookies_button = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.ID, 'onetrust-accept-btn-handle')))
+        cookies_button.click()
+
+        confirm_button = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.LINK_TEXT, 'Confirm Booking')))
+        confirm_button.click()
+        all_cookies = driver.get_cookies()
+        with open('cookies.json', 'w') as cookies_file:
+            json.dump(all_cookies, cookies_file)
+        print("Cookies saved\nSuccess, timeslot is booked\n", flush=True)
 
 
 if __name__ == "__main__":
@@ -97,6 +113,11 @@ if __name__ == "__main__":
     firefox_options.set_headless()
     firefox_options.binary_location = '/usr/lib/firefox/firefox'
 
+    # def func to read config time and set sleep time
+    # sleep_hour =
+    # sleep_mins =
+    # sleep_secs =
+
     sleep_until = datetime.datetime.today().replace(hour=6,
                                                     minute=30,
                                                     second=0,
@@ -106,14 +127,16 @@ if __name__ == "__main__":
 
     driver = webdriver.Firefox(executable_path='/usr/local/bin/geckodriver',
                                options=firefox_options)
-    now = datetime.datetime.now().replace(microsecond=0)
 
-    if sleep_time.days >= 0:  # Dont sleep if same day
-        print(f"Entering sleep for {sleep_time.seconds}", flush=True)
-        time.sleep(sleep_time.seconds)
-    else:
-        time.sleep(5)  # let driver load
+    print(f"Entering sleep for {sleep_time.seconds}", flush=True)
+    time.sleep(sleep_time.seconds)
+
     driver.get(url)
+
+    # Add cookies if available
+    if os.path.isfile('cookies.json'):
+        with open('cookies.json', 'r') as cookies_file:
+            cookies = json.load(cookies_file)
 
     print("Awake \nURL recieved\nChecking times...\n", flush=True)
     # Check for prefered time at Poolside gym
