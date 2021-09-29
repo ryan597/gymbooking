@@ -67,27 +67,38 @@ def book_gym(user, driver):
     # send student number and submit
     student_number_box.send_keys(user)
     student_number_box.submit()
-    # One of these has to fucking work, so lets test them all tonight
+    WebDriverWait(driver, 10).until(
+        ec.invisibility_of_element_located(
+        (By.CLASS, "onetrust-pc-dark-filter ot-fade-in")))
     try:
         confirm = WebDriverWait(driver, 10).until(
             EC.element_to_be_clickable((By.LINK_TEXT, 'Confirm Booking')))
         confirm.click()
         print("Success, timeslot is booked\n", flush=True)
+        return True
     except Exception as e:
         print("Unable to book\n", e, flush=True)
-        try:
-            confirm = driver.find_element_by_link_text('Confirm Booking')
-            ActionChains(driver).move_to_element(confirm).click().perform()
-        except Exception as e:
-            print("Unable to book\n", e, flush=True)
-            try:
-                confirm = driver.find_element_by_link_text('Confirm Booking')
-                driver.execute_script("arguments[0].click();", confirm)
-            except Exception as e:
-                print("FUCKING FUCK for fuck sake\n", e, flush=True)
-                time.sleep(5)
-                confirm = driver.find_element_by_link_text('Confirm Booking')
-                confirm.click()
+
+    try:
+        confirm = driver.find_element_by_link_text('Confirm Booking')
+        ActionChains(driver).move_to_element(confirm).click().perform()
+        print("Success, timeslot is booked\n", flush=True)
+        return True
+    except Exception as e:
+        print("Unable to book\n", e, flush=True)
+
+    try:
+        confirm = driver.find_element_by_link_text('Confirm Booking')
+        driver.execute_script("arguments[0].click();", confirm)
+        print("Success, timeslot is booked\n", flush=True)
+        return True
+    except Exception as e:
+        print("FUCKING FUCK for fuck sake\n", e, flush=True)
+        time.sleep(5)
+        confirm = driver.find_element_by_link_text('Confirm Booking')
+        confirm.click()
+        print("Success, timeslot is booked\n", flush=True)
+        return True
 
 
 if __name__ == "__main__":
@@ -127,7 +138,8 @@ if __name__ == "__main__":
         time.sleep(5)  # let driver load
     driver.get(url)
 
-    print("Awake \nURL recieved\nChecking times...\n", flush=True)
+    now = datetime.datetime.now().replace(microsecond=0)
+    print(f"Start checking times at {now}\n", flush=True)
     # Check for prefered time at Poolside gym
     if check_gym_times(time_slot, driver):
         book_gym(user, driver)
