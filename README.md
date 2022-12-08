@@ -1,5 +1,7 @@
 # Booking for UCD Gym
 
+*Stopped Development, booking of gym was removed after a couple of months and before worked on further functionality*
+
 Automated booking for UCD gym so you don't miss out on the time slot you want.
 
 Since reopening of gyms in Ireland (after closure for the Covid19 pandemic) my university gym requires booking the gym.  
@@ -11,7 +13,6 @@ This program is written to prevent me having to get up at 6am and refreshing my 
 
 ## To Do
 
-- convert to c++ program
 - speed up python implementation
 - more options for timeslots
 - GUI
